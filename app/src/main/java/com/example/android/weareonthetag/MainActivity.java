@@ -13,7 +13,7 @@ import android.widget.TextView;
 import android.widget.Button;
 import android.content.Intent;
 
-public class ConnectToTagger extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity {
     private static final int REQUEST_ENABLE_BT = 1;
 
     /** Called when the activity is first created. */
@@ -74,33 +74,15 @@ public class ConnectToTagger extends ActionBarActivity {
     }
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
-        if (resultCode == RESULT_OK) {
-            connectDevicesBtn.setVisibility(View.VISIBLE);
-            outputTxtView.setText("Bluetooth is Enabled.");
-        } else if (resultCode == RESULT_CANCELED) {
-            outputTxtView.setText("You must have Bluetooth enabled to connect to game devices.");
-        }
-        else{
-            outputTxtView.setText("There was an issue trying to enable Bluetooth.");
-        }
-
-    }
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_connect_to_tagger, container, false);
-            TextView outputTxtView = (TextView)rootView.findViewById(R.id.outputTxtView);
-            Button connectDevicesBtn = (Button) rootView.findViewById(R.id.connectDevicesBtn);
-
-            return rootView;
+        if(requestCode==REQUEST_ENABLE_BT) {
+            if (resultCode == RESULT_OK) {
+                connectDevicesBtn.setVisibility(View.VISIBLE);
+                outputTxtView.setText("Bluetooth is Enabled.");
+            } else if (resultCode == RESULT_CANCELED) {
+                outputTxtView.setText("You must have Bluetooth enabled to connect to game devices.");
+            } else {
+                outputTxtView.setText("There was an issue trying to enable Bluetooth.");
+            }
         }
     }
 }
