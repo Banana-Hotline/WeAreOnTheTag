@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.example.android.weareonthetag.R;
 
 /**
-     * A placeholder fragment containing a simple view.
+     * A fragment containing a view for connecting to tagger hardware.
      */
     public class ConnectTaggerFragment extends Fragment {
 
