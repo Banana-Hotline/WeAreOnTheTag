@@ -23,12 +23,12 @@ public class MainActivity extends ActionBarActivity implements BluetoothMessageH
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connect_to_tagger);
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new ConnectHardwareFragment())
                     .commit();
         }
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     }
 
 

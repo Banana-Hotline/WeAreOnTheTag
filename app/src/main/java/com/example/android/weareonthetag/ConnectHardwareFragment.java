@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.Set;
@@ -18,7 +19,7 @@ import java.util.Set;
  * A fragment containing a view for connecting to tagger hardware.
  */
 public class ConnectHardwareFragment extends Fragment {
-    BluetoothAdapter bta = MainActivity.bluetoothAdapter;
+    BluetoothAdapter bta;
     ArrayAdapter mArrayAdapter;
     View rootView;
     Button connectDevicesBtn;
@@ -34,7 +35,10 @@ public class ConnectHardwareFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_connect_hardware, container, false);
         outputTxtView = (TextView) rootView.findViewById(R.id.outputTxtView);
         connectDevicesBtn = (Button) rootView.findViewById(R.id.connectDevicesBtn);
+        ListView lv = (ListView) rootView.findViewById(R.id.listView);
+        bta = MainActivity.bluetoothAdapter;
         mArrayAdapter = new ArrayAdapter(getActivity(), R.layout.list_item_bt_devices, R.id.list_item_bt_device);
+        lv.setAdapter(mArrayAdapter);
         connectDevicesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,6 +55,7 @@ public class ConnectHardwareFragment extends Fragment {
         // If there are paired devices
         if (pairedDevices.size() > 0) {
             // Loop through paired devices
+            mArrayAdapter.clear();
             for (BluetoothDevice device : pairedDevices) {
                 // Add the name and address to an array adapter to show in a ListView
                 mArrayAdapter.add(device.getName() + "\n" + device.getAddress());
