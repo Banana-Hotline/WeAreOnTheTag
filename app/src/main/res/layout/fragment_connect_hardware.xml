@@ -10,7 +10,7 @@
     android:id="@+id/PlaceholderFragment"
     android:weightSum="1">
     <ListView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="480dp"
         android:id="@+id/listView"
         android:layout_alignParentLeft="true"
