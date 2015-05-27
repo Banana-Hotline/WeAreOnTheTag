@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -23,7 +24,6 @@ public class ConnectHardwareFragment extends Fragment {
     ArrayAdapter mArrayAdapter;
     View rootView;
     Button connectDevicesBtn;
-    TextView outputTxtView;
     BluetoothMessageHandler mListener;
 
     public ConnectHardwareFragment() {
@@ -33,12 +33,17 @@ public class ConnectHardwareFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_connect_hardware, container, false);
-        outputTxtView = (TextView) rootView.findViewById(R.id.outputTxtView);
-        connectDevicesBtn = (Button) rootView.findViewById(R.id.connectDevicesBtn);
+        connectDevicesBtn = (Button) rootView.findViewById(R.id.refreshDevicesBtn);
         ListView lv = (ListView) rootView.findViewById(R.id.listView);
         bta = MainActivity.bluetoothAdapter;
         mArrayAdapter = new ArrayAdapter(getActivity(), R.layout.list_item_bt_devices, R.id.list_item_bt_device);
         lv.setAdapter(mArrayAdapter);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                rootView.findViewById(R.id.startButton).setVisibility(View.VISIBLE);
+            }
+        });
         connectDevicesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,18 +71,15 @@ public class ConnectHardwareFragment extends Fragment {
 
     private void CheckBlueToothState() {
         if (MainActivity.bluetoothAdapter == null) {
-            outputTxtView.setText("Bluetooth NOT supported");
         } else {
             if (MainActivity.bluetoothAdapter.isEnabled()) {
                 if (MainActivity.bluetoothAdapter.isDiscovering()) {
-                    outputTxtView.setText("Bluetooth is currently in device discovery process.");
                 } else {
-                    outputTxtView.setText("Bluetooth is Enabled.");
                     connectDevicesBtn.setVisibility(View.VISIBLE);
+                    CheckForKnownDevices();
                 }
             } else {
-                outputTxtView.setText("Bluetooth is NOT Enabled!");
-                mListener.onBTDisabled(rootView);
+                mListener.onBTDisabled(this);
             }
         }
     }

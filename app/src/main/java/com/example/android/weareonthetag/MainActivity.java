@@ -1,5 +1,6 @@
 package com.example.android.weareonthetag;
 
+import android.app.Fragment;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -17,7 +18,7 @@ public class MainActivity extends ActionBarActivity implements BluetoothMessageH
      * Called when the activity is first created.
      */
     public static BluetoothAdapter bluetoothAdapter;
-    View rootView;
+    ConnectHardwareFragment communicatingFrag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,23 +58,20 @@ public class MainActivity extends ActionBarActivity implements BluetoothMessageH
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
 
-        Button connectDevicesBtn =(Button) rootView.findViewById(R.id.connectDevicesBtn);
-        TextView outputTxtView =(TextView) rootView.findViewById(R.id.outputTxtView);
+        Button connectDevicesBtn = (Button) communicatingFrag.rootView.findViewById(R.id.refreshDevicesBtn);
         if (requestCode == REQUEST_ENABLE_BT) {
             if (resultCode == RESULT_OK) {
                 connectDevicesBtn.setVisibility(View.VISIBLE);
-                outputTxtView.setText("Bluetooth is Enabled.");
+                communicatingFrag.CheckForKnownDevices();
             } else if (resultCode == RESULT_CANCELED) {
-                outputTxtView.setText("You must have Bluetooth enabled to connect to game devices.");
             } else {
-                outputTxtView.setText("There was an issue trying to enable Bluetooth.");
             }
         }
     }
 
     @Override
-    public void onBTDisabled(View v) {
-        rootView = v;
+    public void onBTDisabled(ConnectHardwareFragment c) {
+        communicatingFrag = c;
         Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
         startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
     }

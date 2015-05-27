@@ -7,5 +7,5 @@ import android.view.View;
  * Created by Banana on 5/23/2015.
  */
 public interface BluetoothMessageHandler{
-    public void onBTDisabled(View v);
+    public void onBTDisabled(ConnectHardwareFragment c);
 }
