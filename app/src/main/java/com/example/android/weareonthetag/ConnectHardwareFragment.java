@@ -25,6 +25,7 @@ public class ConnectHardwareFragment extends Fragment {
     View rootView;
     Button connectDevicesBtn;
     BluetoothMessageHandler mListener;
+    Set<BluetoothDevice> pairedDevices;
 
     public ConnectHardwareFragment() {
     }
@@ -42,6 +43,7 @@ public class ConnectHardwareFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 rootView.findViewById(R.id.startButton).setVisibility(View.VISIBLE);
+                System.out.print(pairedDevices.toArray()[position]+"\n");
             }
         });
         connectDevicesBtn.setOnClickListener(new View.OnClickListener() {
@@ -56,7 +58,7 @@ public class ConnectHardwareFragment extends Fragment {
     }
 
     public boolean CheckForKnownDevices() {
-        Set<BluetoothDevice> pairedDevices = bta.getBondedDevices();
+        pairedDevices = bta.getBondedDevices();
         // If there are paired devices
         if (pairedDevices.size() > 0) {
             // Loop through paired devices
