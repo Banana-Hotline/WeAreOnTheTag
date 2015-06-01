@@ -3,8 +3,10 @@ package com.example.android.weareonthetag;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +16,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * A fragment containing a view for connecting to tagger hardware.
@@ -26,6 +30,8 @@ public class ConnectHardwareFragment extends Fragment {
     Button connectDevicesBtn;
     BluetoothMessageHandler mListener;
     Set<BluetoothDevice> pairedDevices;
+    ConnectionHandler btConnectionHandler;
+
 
     public ConnectHardwareFragment() {
     }
@@ -43,7 +49,8 @@ public class ConnectHardwareFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 rootView.findViewById(R.id.startButton).setVisibility(View.VISIBLE);
-                System.out.print(pairedDevices.toArray()[position]+"\n");
+                btConnectionHandler = new ConnectionHandler(bta, bta.getRemoteDevice(pairedDevices.toArray()[position].toString()));
+                btConnectionHandler.start();
             }
         });
         connectDevicesBtn.setOnClickListener(new View.OnClickListener() {
@@ -89,10 +96,20 @@ public class ConnectHardwareFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-            try {
-                mListener = (BluetoothMessageHandler) activity;
-            } catch (ClassCastException e) {
-                throw new ClassCastException(activity.toString() + " must implement ExampleFragmentCallbackInterface ");
-            }
+        try {
+            mListener = (BluetoothMessageHandler) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement ExampleFragmentCallbackInterface ");
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        cancelConnection();
+    }
+
+    public void cancelConnection() {
+        btConnectionHandler.cancel();
     }
 }
