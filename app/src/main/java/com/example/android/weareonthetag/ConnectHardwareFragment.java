@@ -44,13 +44,14 @@ public class ConnectHardwareFragment extends Fragment {
         ListView lv = (ListView) rootView.findViewById(R.id.listView);
         bta = MainActivity.bluetoothAdapter;
         mArrayAdapter = new ArrayAdapter(getActivity(), R.layout.list_item_bt_devices, R.id.list_item_bt_device);
+        btConnectionHandler = new ConnectionHandler(bta);
+        btConnectionHandler.start();
         lv.setAdapter(mArrayAdapter);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 rootView.findViewById(R.id.startButton).setVisibility(View.VISIBLE);
-                btConnectionHandler = new ConnectionHandler(bta, bta.getRemoteDevice(pairedDevices.toArray()[position].toString()));
-                btConnectionHandler.start();
+                btConnectionHandler.addDevice(bta.getRemoteDevice(pairedDevices.toArray()[position].toString()));
             }
         });
         connectDevicesBtn.setOnClickListener(new View.OnClickListener() {
