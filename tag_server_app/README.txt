@@ -1,0 +1,1 @@
+Contains the server code. Our server is pretty lightweight (< 0g).
